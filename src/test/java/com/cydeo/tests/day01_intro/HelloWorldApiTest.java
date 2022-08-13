@@ -15,8 +15,21 @@ public class HelloWorldApiTest {
         //send a get request and save response inside the Response object
         Response response = RestAssured.get(url);
 
+        //print response body in a formatted way
         response.prettyPrint();
 
-    }
+        //print status code
+        System.out.println("Status code: " + response.statusCode());
+        System.out.println("Status line: " + response.getStatusLine());
 
+        //assert that the status code is 200 (according to the requirements)
+        Assertions.assertEquals(200,response.statusCode());
+
+        //declare statusCode variable and assign the response status code then assert
+        int statusCode = response.statusCode();
+        Assertions.assertEquals(200,statusCode);
+
+        //And "Hello World!" message should be in the response body
+        Assertions.assertTrue(response.asString().contains("Hello World!"));
+    }
 }
