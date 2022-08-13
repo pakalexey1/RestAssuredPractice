@@ -54,6 +54,13 @@ public class SpartanHamcrestTest extends SpartanTestBase {
     @DisplayName("GET / spartans / search -> hamcrest assertion")
     @Test
     public void searchTestWithQueryParam(){
+        given().accept(ContentType.JSON)
+                .and().queryParams("nameContains","e")
+                .and().queryParams("gender","Female")
+                .when().get("/spartans/search")
+                .then().statusCode(200)
+                .and().contentType(ContentType.JSON)
+                .and().header("Date", containsString("2022"));
 
     }
 }
