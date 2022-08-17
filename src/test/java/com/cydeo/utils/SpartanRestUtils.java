@@ -21,7 +21,7 @@ public class SpartanRestUtils {
         Faker random = new Faker();
         Spartan spartan = new Spartan();
         spartan.setName(random.name().firstName());
-        int num = random.number().numberBetween(1, 2);
+        int num = random.number().numberBetween(1, 3); //3 is not included
         if (num == 1) {
             spartan.setGender("Female");
         } else {
