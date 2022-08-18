@@ -1,28 +1,20 @@
 package com.cydeo.tests.homework;
 
 import com.cydeo.utils.HrApiTestBase;
-import com.cydeo.utils.SpartanRestUtils;
-import com.cydeo.utils.SpartanTestBase;
 import io.restassured.http.ContentType;
-import io.restassured.http.Headers;
 import io.restassured.response.Response;
-import io.restassured.response.ValidatableResponse;
 import org.apache.http.HttpStatus;
-import org.apache.http.impl.bootstrap.HttpServer;
-import org.apache.poi.xwpf.usermodel.IBody;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 
 import static io.restassured.RestAssured.*;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
-public class SpartanPostTest extends HrApiTestBase {
+public class Hw3_RegionsPostTest extends HrApiTestBase {
     /**
      * 1) POST a region then do validations. Please use Map or POJO class, or JsonPath
      * /
