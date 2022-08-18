@@ -61,8 +61,8 @@ public class SpartanAPIAndDBValidationTest extends SpartanTestBase {
 
         assertThat(post.statusCode(), equalTo(HttpStatus.SC_CREATED));
         assertThat(post.contentType(), is(ContentType.JSON.toString()));
-        assertThat(post.jsonPath().getString("success"), equalTo("A Spartan is Born!"));// these two are the same
-        assertThat(post.path("success"),equalTo("A Spartan is Born!"));// these two are the same
+        assertThat(post.jsonPath().getString("success"), equalTo("A Spartan is Born!"));// same as below
+        assertThat(post.path("success"),equalTo("A Spartan is Born!"));// same as above
 
         int newSpartanID = jsonPath.getInt("data.id");
         System.out.println("New Spartan's ID = " + newSpartanID);
@@ -82,6 +82,7 @@ public class SpartanAPIAndDBValidationTest extends SpartanTestBase {
         //assert/validate data from database matches data from post request
         assertThat(dbMap.get("NAME"), equalTo(postRequestMap.get("name")));
         assertThat(dbMap.get("GENDER"), equalTo(postRequestMap.get("gender")));
-        assertThat(dbMap.get("PHONE"), equalTo(postRequestMap.get("phone")+"")); // for some reason Long data type that was used on line 51 didn't work.
+        assertThat(dbMap.get("PHONE"), equalTo(postRequestMap.get("phone")+"")); // for some reason Long data
+                                                                        // type that was used on line 51 didn't work.
     }
 }
