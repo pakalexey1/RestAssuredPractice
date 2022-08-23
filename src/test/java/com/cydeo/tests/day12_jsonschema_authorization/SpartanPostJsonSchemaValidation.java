@@ -23,34 +23,41 @@ import static org.hamcrest.Matchers.*;
 
 public class SpartanPostJsonSchemaValidation extends SpartanTestBase {
     /**
-     given accept is json and content type is json
-     and body is:
-         {
-         "gender":"Male"
-        "name":"TestPost1"
-        "phone":1231234444
-         }
-     when I send POST request to /spartans
-     Then the status code is 201
-     And body should match SpartanPostSchema.json schema
+     * given accept is json and content type is json
+     * and body is:
+     * {
+     * "gender":"Male"
+     * "name":"TestPost1"
+     * "phone":1231234444
+     * }
+     * when I send POST request to /spartans
+     * Then the status code is 201
+     * And body should match SpartanPostSchema.json schema
      */
 
     @DisplayName("POST / sparan -> json schema validation")
     @Test
-    public void postSpartanSchemaTest(){
+    public void postSpartanSchemaTest() {
         Map<String, Object> newSpartan = new HashMap<>();
-        newSpartan.put("gender","Male");
+        newSpartan.put("gender", "Male");
         newSpartan.put("name", "TestPost1");
-        newSpartan.put("phone",1231234444L);
+        newSpartan.put("phone", 1231234444L);
 
-        given().accept(ContentType.JSON)
+        int newSpartanID = given().accept(ContentType.JSON)
                 .and().body(newSpartan)
                 .and().contentType(ContentType.JSON)
                 .when().post("/spartans")
                 .then().statusCode(201)
                 .and().contentType(ContentType.JSON)
                 .and().body(JsonSchemaValidator.matchesJsonSchema(new File("src/test/resources/jsonschemas/SpartanPostSchema")))
-                .log().all();
+                .log().all()
+//              .and().extract().jsonPath(); //extracts the body and assigns it to jsonPath
+//              .and().extract().response(); // to extract everything, the status code, the body, etc.
+                .and().extract().jsonPath().getInt("data.id");// extracts the ID integer value
+
+        System.out.println("New Spartan ID = " + newSpartanID);
+        SpartanRestUtils.deleteSpartanById(newSpartanID);
+
 
     }
 }
