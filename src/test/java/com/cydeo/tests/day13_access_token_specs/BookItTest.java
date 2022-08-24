@@ -93,7 +93,26 @@ public class BookItTest extends BookItTestBase {
          }
          */
 
-        String accessToken = getAccessToken(ConfigurationReader.getProperty("team_member_email"),ConfigurationReader.getProperty("team_member_password"));
+        String accessToken = getAccessToken(ConfigurationReader.getProperty("team_member_email")
+                ,ConfigurationReader.getProperty("team_member_password"));
+
         System.out.println("Access token: " + accessToken);
+
+       Map<String,?> roomInfoMap = given().accept(ContentType.JSON)
+                .and().pathParam("room_name","mit")
+                .and().header("Authorization",accessToken)
+                .when().get("/api/rooms/{room_name}")
+                .then().assertThat().statusCode(200)
+                .and().contentType(ContentType.JSON)
+                .and().extract().body().as(Map.class);
+
+        System.out.println("roomInfoMap = " + roomInfoMap);
+
+        assertThat(roomInfoMap.get("id"),is(111));
+        assertThat(roomInfoMap.get("name"),equalTo("mit"));
+        assertThat(roomInfoMap.get("description"),is("mens et manus"));
+        assertThat(roomInfoMap.get("capacity"),is(6));
+        assertThat(roomInfoMap.get("withTV"),is(true));
+        assertThat(roomInfoMap.get("withWhiteBoard"),is(true));
     }
 }
