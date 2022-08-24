@@ -1,0 +1,22 @@
+ * given accept is json
+ * and content type is json
+ * When I send post request to "/regions/"
+ * With json:
+ * {
+ *     "region_id":100,
+ *     "region_name":"Test Region"
+ * }
+ * Then status code is 201
+ * content type is json
+ * region_id is 100
+ * region_name is Test Region
+ */
+
+/
+ * given accept is json
+ * When I send post request to "/regions/100"
+ * Then status code is 200
+ * content type is json
+ * region_id is 100
+ * region_name is Test Region
+ */

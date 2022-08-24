@@ -66,6 +66,34 @@ public class BookItTest extends BookItTestBase {
                 .and().header("Authorization",accessToken)
                 .and().pathParam("campus_location","IL")
                 .when().get("/api/campuses/{campus_location}")
-                .then().assertThat().statusCode(200);
+                .then().assertThat().statusCode(200)
+                .and().contentType("application/json")
+                .and().body("location",equalTo("IL"))
+                .and().body("clusters[0].rooms.name",hasItems("google" , "apple", "microsoft", "tesla"));
+    }
+
+
+    @Test
+    public void roomInfoTest() {
+        /**
+         * Given accept type is Json
+         * And header Authorization is access token of team leader
+         * And path param "room_name" is "mit"
+         * When I send GET request to "/api/rooms/{room_name}
+         * Then status code is 200
+         * And content type is json
+         body matches data:
+         {
+         "id": 111,
+         "name": "mit",
+         "description": "mens et manus",
+         "capacity": 6,
+         "withTV": true,
+         "withWhiteBoard": true
+         }
+         */
+
+        String accessToken = getAccessToken(ConfigurationReader.getProperty("team_member_email"),ConfigurationReader.getProperty("team_member_password"));
+        System.out.println("Access token: " + accessToken);
     }
 }

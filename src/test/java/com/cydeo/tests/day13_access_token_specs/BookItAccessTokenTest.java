@@ -54,6 +54,7 @@ public class BookItAccessTokenTest {
          */
         Assertions.assertFalse(accessToken.isEmpty() && accessToken == null);
     }
+
 }
 
 //URLS and credentials goto configuration.properties
