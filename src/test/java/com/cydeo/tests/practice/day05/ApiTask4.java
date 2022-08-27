@@ -1,5 +1,6 @@
 package com.cydeo.tests.practice.day05;
 
+import com.cydeo.pojo.POSTRegion;
 import com.cydeo.pojo.Spartan;
 import com.cydeo.tests.day04_path_jsonpath.HRApiGetTest;
 import com.cydeo.utils.*;
@@ -13,6 +14,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import javax.annotation.meta.When;
 import java.io.File;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -51,7 +53,7 @@ public class ApiTask4 extends HrApiTestBase {
         Map <String,Object> requestBody= new HashMap<>();
         requestBody.put("region_id",regionId);
         requestBody.put("region_name","Random Region Name");
-    //POST REGION
+    //PUT REGION
          int createdRegionId = given().accept(ContentType.JSON)
                  .and().contentType(ContentType.JSON)
                  .and().body(requestBody).log().body() //to print the body
@@ -76,5 +78,45 @@ public class ApiTask4 extends HrApiTestBase {
                  .when().delete("/regions/{region_id}").prettyPeek()
                  .then().statusCode(200)
                  .body("rowsDeleted", is(1));
+     }
+
+     @Test
+    /**
+     2) PUT request then DELETE
+     /
+     * Given accept type is Json
+     * And content type is json
+     * When i send PUT request to /regions/100
+     * With json body:
+     *    {
+     *      "region_id": 100,
+     *      "region_name": "Wooden Region"
+     *    }
+     * Then status code is 200
+     * And content type is json
+     * region_id is 100
+     * region_name is Wooden Region
+     */
+    public void putRequest(){
+         int regionId = given().accept(ContentType.JSON)
+                 .and().contentType(ContentType.JSON)
+                 .pathParam("region_id", 103)
+                 .body(new POSTRegion(103, "IntelliJ Region")) // constructor from the POJO class
+                 .when().put("/regions/{region_id}").prettyPeek()
+                 .then().statusCode(HttpStatus.SC_OK)
+                 .and().contentType(ContentType.JSON)
+                 .body("region_id", is(103))
+                 .body("region_name", is("IntelliJ Region"))
+                 .extract().jsonPath().getInt("region_id");
+
+         System.out.println("Region id from PUT " + regionId);
+
+         //delete the region
+
+         given().accept(ContentType.JSON)
+                 .and().pathParam("region_id",regionId)
+                 .when().delete("/regions/{region_id}")
+                 .then().statusCode(HttpStatus.SC_OK)
+                 .body("rowsDeleted",is(1));
      }
 }

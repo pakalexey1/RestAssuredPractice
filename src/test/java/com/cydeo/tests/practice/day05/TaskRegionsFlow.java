@@ -1,5 +1,6 @@
 package com.cydeo.tests.practice.day05;
 
+import com.cydeo.pojo.POSTRegion;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import com.cydeo.tests.day04_path_jsonpath.HRApiGetTest;
 import com.cydeo.utils.*;
@@ -24,14 +25,14 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class APITask4withDifferentMethods extends HrApiTestBase {
+public class TaskRegionsFlow extends HrApiTestBase {
     int regionId;
     static int createdRegionId;
 
     @Test
     @Order(1)
     public void POSTRegion() {
-        regionId = 1017;
+        regionId = 10191;
         Map<String, Object> requestBody = new HashMap<>();
         requestBody.put("region_id", regionId);
         requestBody.put("region_name", "Random Region Name");
@@ -49,8 +50,25 @@ public class APITask4withDifferentMethods extends HrApiTestBase {
 
     @Test
     @Order(2)
+    public void PUTRequest() {
+        regionId = given().accept(ContentType.JSON)
+                .and().contentType(ContentType.JSON)
+                .pathParam("region_id", 103)
+                .body(new POSTRegion(103, "IntelliJ Region")) // constructor from the POJO class
+                .when().put("/regions/{region_id}").prettyPeek()
+                .then().statusCode(HttpStatus.SC_OK)
+                .and().contentType(ContentType.JSON)
+                .body("region_id", is(103))
+                .body("region_name", is("IntelliJ Region"))
+                .extract().jsonPath().getInt("region_id");
+
+        System.out.println("Region id from PUT " + regionId);
+    }
+
+    @Test
+    @Order(3)
     public void GETRegion() {
-    //GET region
+        //GET region
         given().accept(ContentType.JSON)
                 .and().pathParam("id", createdRegionId)
                 .when().get("/regions/{id}")
@@ -60,7 +78,7 @@ public class APITask4withDifferentMethods extends HrApiTestBase {
     }
 
     @Test
-    @Order(3)
+    @Order(4)
     public void DELETERegion() {
         given().accept(ContentType.JSON)
                 .and().pathParam("region_id",createdRegionId)
